@@ -11,8 +11,6 @@ metadata:
 spec:
   interval: 1h
   url: oci://ghcr.io/kagent-dev/kagent/helm/kagent
-  ref:
-    tag: "0.7.23"
 ---
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
@@ -20,7 +18,7 @@ metadata:
   name: kagent
   namespace: kagent
 spec:
-  interval: 1h
+  interval: 1m #1h
   releaseName: kagent
   postRenderers:
   - kustomize:
@@ -28,7 +26,7 @@ spec:
       - patch: |
           - op: add
             path: /metadata/labels/app.kubernetes.io~1version
-            value: "0.7.23"
+            value: "0.9.24"
         target:
           labelSelector: app.kubernetes.io/name=kagent
   dependsOn:
@@ -43,11 +41,11 @@ spec:
   values:
     controller:
       image:
-        tag: 0.7.23
-    tag: 0.7.23
+        tag: 0.9.24
+    tag: 0.9.24
     ui:
       image:
-        tag: 0.7.23
+        tag: 0.9.24
     tools:
       querydoc:
         enabled: false
@@ -68,6 +66,15 @@ spec:
       default: openAI
       openAI:
         apiKey: OPENAI_API_KEY
+
+    # providers:
+    #   default: openAI
+    #   openAI:
+    #     apiKeySecretKey: OPENAI_API_KEY
+    #     apiKeySecretRef: kagent-openai
+    #     model: gpt-4o-mini
+    #     provider: OpenAI
+
 ---
 apiVersion: gateway.networking.k8s.io/v1beta1
 kind: ReferenceGrant
