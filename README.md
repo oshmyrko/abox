@@ -17,6 +17,10 @@
 ## Quickstart
 
 ```bash
+echo "gemini_api_key = \"YOUR_GEMINI_API_KEY\"" > bootstrap/kubectl.tfvars
+```
+
+```bash
 make run
 ```
 
@@ -37,7 +41,7 @@ make run  →  scripts/setup.sh
   → tofu apply (bootstrap/)
       → KinD cluster
       → Flux Operator + FluxInstance
-      → ResourceSetInputProvider   polls oci://ghcr.io/den-vasyliev/abox/releases
+      → ResourceSetInputProvider   polls oci://ghcr.io/username/abox/releases
       → ResourceSet                creates OCIRepository + 2 Kustomizations
           → releases/crds/    gateway-api-crds, agentgateway-crds, kagent-crds
           → releases/         agentgateway (Gateway + GatewayClass)

@@ -4,3 +4,9 @@ kind: Kustomization
 resources:
   - agentgateway.yaml
   - kagent.yaml
+  # Extra manifests
+  - secrets.yaml
+  - mcp-server.yaml
+  - kagent-models.yaml
+  - k8s-readonly-agent.yaml
+  - webpage-fetch-agent.yaml

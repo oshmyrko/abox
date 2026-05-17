@@ -18,14 +18,21 @@ tofu:
 	@cd bootstrap && tofu init
 
 apply:
-	@cd bootstrap && tofu apply -auto-approve
+	@cd bootstrap && tofu init && tofu apply -auto-approve
 
 down:
 	@cd bootstrap && tofu destroy -auto-approve
+	@pkill -f cloud-provider-kind || sudo pkill -f cloud-provider-kind || true
+
+cloud-provider-kind-kill:
+	@pkill -f cloud-provider-kind || sudo pkill -f cloud-provider-kind || true
+
+cloud-provider-kind-start:
+	@nohup sudo /tmp/cloud-provider-kind > /tmp/cloud-provider-kind.log 2>&1 &
 
 push:
 	@git fetch origin --tags --force
-	$(eval TAG=$(shell git tag --list 'v*' | sort -V | tail -1 | sed 's/^v//' || echo "0.0.0"))
+	$(eval TAG=$(shell git tag --list 'v*' | sort -V | tail -1 | sed 's/^v//' | grep . || echo "0.0.0"))
 	$(eval MAJOR=$(shell echo $(TAG) | cut -d. -f1))
 	$(eval MINOR=$(shell echo $(TAG) | cut -d. -f2))
 	$(eval PATCH=$(shell echo $(TAG) | cut -d. -f3))

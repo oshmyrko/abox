@@ -3,16 +3,28 @@ kind: Namespace
 metadata:
   name: kagent
 ---
+# apiVersion: source.toolkit.fluxcd.io/v1
+# kind: OCIRepository
+# metadata:
+#   name: kagent
+#   namespace: flux-system
+# spec:
+#   interval: 1h
+#   url: oci://ghcr.io/kagent-dev/kagent/helm/kagent
+#   ref:
+#     tag: "0.9.4"
+
+# Switching to HelmRepository as OCIRepository has an issue with deployment,
+# specifically it gets wrong version
 apiVersion: source.toolkit.fluxcd.io/v1
-kind: OCIRepository
+kind: HelmRepository
 metadata:
   name: kagent
   namespace: flux-system
 spec:
-  interval: 1h
-  url: oci://ghcr.io/kagent-dev/kagent/helm/kagent
-  ref:
-    tag: "0.7.23"
+  interval: 5m
+  type: oci
+  url: oci://ghcr.io/kagent-dev/kagent/helm
 ---
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
@@ -20,54 +32,50 @@ metadata:
   name: kagent
   namespace: kagent
 spec:
-  interval: 1h
+  chart:
+    spec:
+      interval: 1h
+      chart: kagent
+      version: 0.9.4
+      sourceRef:
+        kind: HelmRepository
+        name: kagent
+        namespace: flux-system
+  interval: 1m
   releaseName: kagent
-  postRenderers:
-  - kustomize:
-      patches:
-      - patch: |
-          - op: add
-            path: /metadata/labels/app.kubernetes.io~1version
-            value: "0.7.23"
-        target:
-          labelSelector: app.kubernetes.io/name=kagent
   dependsOn:
-    - name: kagent-crds
-      namespace: kagent
-  chartRef:
-    kind: OCIRepository
-    name: kagent
-    namespace: flux-system
+  - name: kagent-crds
+    namespace: kagent
   install:
     createNamespace: true
   values:
+    tag: 0.9.4
     controller:
       image:
-        tag: 0.7.23
-    tag: 0.7.23
+        tag: 0.9.4
     ui:
       image:
-        tag: 0.7.23
-    tools:
-      querydoc:
-        enabled: false
-    agents:
-      cilium-policy-agent:
-        enabled: false
-      cilium-manager-agent:
-        enabled: false
-      cilium-debug-agent:
-        enabled: false
-      istio-agent:
-        enabled: false
-      istio-policy-agent:
-        enabled: false
-      istio-manager-agent:
-        enabled: false
+        tag: 0.9.4
+    argo-rollouts-agent:
+      enabled: false
+    cilium-policy-agent:
+      enabled: false
+    cilium-manager-agent:
+      enabled: false
+    cilium-debug-agent:
+      enabled: false
+    istio-agent:
+      enabled: false
+    querydoc:
+      enabled: false
     providers:
-      default: openAI
-      openAI:
-        apiKey: OPENAI_API_KEY
+      default: gemini
+      gemini:
+        provider: Gemini
+        model: gemini-2.5-flash-lite
+        apiKeySecretRef: kagent-gemini-api-key
+        apiKeySecretKey: GEMINI_API_KEY
+        #apiKey: DEFAULT_GEMINI_API_KEY_STUB
 ---
 apiVersion: gateway.networking.k8s.io/v1beta1
 kind: ReferenceGrant
