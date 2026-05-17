@@ -5,9 +5,9 @@ variable "cluster_name" {
 }
 
 variable "oci_registry" {
-  description = "OCI registry base URL"
+  description = "OCI registry base URL, e.g. 'oci://ghcr.io/USERNAME/abox'"
   type        = string
-  default     = "oci://ghcr.io/den-vasyliev/abox"
+  default     = null
 }
 
 variable "releases_version" {
