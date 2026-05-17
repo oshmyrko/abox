@@ -21,4 +21,3 @@ resource "kind_cluster" "this" {
     }
   }
 }
-
