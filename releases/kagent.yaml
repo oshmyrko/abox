@@ -42,13 +42,9 @@ spec:
     createNamespace: true
   values:
     tag: 0.9.4
-    controller:
-      image:
-        tag: 0.9.4
-    ui:
-      image:
-        tag: 0.9.4
     querydoc:
+      enabled: false
+    argo-rollouts-agent:
       enabled: false
     cilium-policy-agent:
       enabled: false
@@ -56,21 +52,20 @@ spec:
       enabled: false
     cilium-debug-agent:
       enabled: false
+    helm-agent:
+      enabled: true
     istio-agent:
+      enabled: false
+    kgateway-agent:
+      enabled: true
+    observability-agent:
+      enabled: true
+    promql-agent:
       enabled: false
     providers:
       default: openAI
       openAI:
-        apiKey: OPENAI_API_KEY
-
-    # providers:
-    #   default: openAI
-    #   openAI:
-    #     apiKeySecretKey: OPENAI_API_KEY
-    #     apiKeySecretRef: kagent-openai
-    #     model: gpt-4o-mini
-    #     provider: OpenAI
-
+        apiKey: "OPENAI_API_KEY_STUB"
 ---
 apiVersion: gateway.networking.k8s.io/v1beta1
 kind: ReferenceGrant
