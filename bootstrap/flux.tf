@@ -1,3 +1,11 @@
+data "external" "github_user" {
+  program = ["bash", "-c", "git remote get-url origin | awk -F'[:/]' '{print $2}' | jq -R '{username: .}'"]
+}
+
+locals {
+  oci_registry = coalesce(var.oci_registry, "oci://ghcr.io/${data.external.github_user.result.username}/abox")
+}
+
 # ==========================================
 # Bootstrap Flux Operator
 # ==========================================
@@ -42,10 +50,10 @@ resource "kubectl_manifest" "rsip" {
       name: releases-image
       namespace: flux-system
       annotations:
-        fluxcd.controlplane.io/reconcileEvery: 5m
+        fluxcd.controlplane.io/reconcileEvery: 2m
     spec:
       type: OCIArtifactTag
-      url: ${var.oci_registry}/releases
+      url: ${local.oci_registry}/releases
       filter:
         includeTag: "^\\d+\\.\\d+\\.\\d+$"
         limit: 1
@@ -78,7 +86,7 @@ resource "kubectl_manifest" "rset" {
           namespace: flux-system
         spec:
           interval: 2m
-          url: ${var.oci_registry}/releases
+          url: ${local.oci_registry}/releases
           ref:
             tag: "<< inputs.tag >>"
       - apiVersion: kustomize.toolkit.fluxcd.io/v1
