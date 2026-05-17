@@ -23,9 +23,12 @@ apply:
 down:
 	@cd bootstrap && tofu destroy -auto-approve
 
+kill-cloud-provider-kind:
+	@pkill -f cloud-provider-kind || sudo pkill -f cloud-provider-kind || true
+
 push:
 	@git fetch origin --tags --force
-	$(eval TAG=$(shell git tag --list 'v*' | sort -V | tail -1 | sed 's/^v//' || echo "0.0.0"))
+	$(eval TAG=$(shell git tag --list 'v*' | sort -V | tail -1 | sed 's/^v//' | grep . || echo "0.0.0"))
 	$(eval MAJOR=$(shell echo $(TAG) | cut -d. -f1))
 	$(eval MINOR=$(shell echo $(TAG) | cut -d. -f2))
 	$(eval PATCH=$(shell echo $(TAG) | cut -d. -f3))

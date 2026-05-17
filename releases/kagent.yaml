@@ -11,8 +11,8 @@ metadata:
 spec:
   interval: 1h
   url: oci://ghcr.io/kagent-dev/kagent/helm/kagent
-  ref:
-    tag: "0.7.23"
+  #ref:
+  #  tag: "0.9.4"
 ---
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
@@ -22,15 +22,6 @@ metadata:
 spec:
   interval: 1h
   releaseName: kagent
-  postRenderers:
-  - kustomize:
-      patches:
-      - patch: |
-          - op: add
-            path: /metadata/labels/app.kubernetes.io~1version
-            value: "0.7.23"
-        target:
-          labelSelector: app.kubernetes.io/name=kagent
   dependsOn:
     - name: kagent-crds
       namespace: kagent
@@ -41,47 +32,31 @@ spec:
   install:
     createNamespace: true
   values:
+    tag: 0.9.4
     controller:
       image:
-        tag: 0.7.23
-    tag: 0.7.23
+        tag: 0.9.4
     ui:
       image:
-        tag: 0.7.23
-    tools:
-      querydoc:
-        enabled: false
-    agents:
-      cilium-policy-agent:
-        enabled: false
-      cilium-manager-agent:
-        enabled: false
-      cilium-debug-agent:
-        enabled: false
-      istio-agent:
-        enabled: false
-      istio-policy-agent:
-        enabled: false
-      istio-manager-agent:
-        enabled: false
+        tag: 0.9.4
+    argo-rollouts-agent:
+      enabled: false
+    cilium-policy-agent:
+      enabled: false
+    cilium-manager-agent:
+      enabled: false
+    cilium-debug-agent:
+      enabled: false
+    istio-agent:
+      enabled: false
+    promql-agent:
+      enabled: false
+    querydoc:
+      enabled: false
     providers:
       default: openAI
-      openAI:
-        apiKey: OPENAI_API_KEY
----
-apiVersion: gateway.networking.k8s.io/v1beta1
-kind: ReferenceGrant
-metadata:
-  name: kagent
-  namespace: kagent
-spec:
-  from:
-  - group: gateway.networking.k8s.io
-    kind: HTTPRoute
-    namespace: kagent
-  to:
-  - group: ""
-    kind: Service
+      #openAI:
+      #  apiKey: OPENAI_API_KEY_STUB
 ---
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
@@ -93,14 +68,6 @@ spec:
   - name: agentgateway-external
     namespace: agentgateway-system
   rules:
-  - matches:
-    - path:
-        type: PathPrefix
-        value: /api
-    backendRefs:
-    - name: kagent-controller
-      namespace: kagent
-      port: 8083
   - matches:
     - path:
         type: PathPrefix
