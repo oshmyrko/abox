@@ -33,8 +33,12 @@ spec:
     createNamespace: true
   values:
     tag: 0.9.4
-    querydoc:
-      enabled: false
+    controller:
+      image:
+        tag: 0.9.4
+    ui:
+      image:
+        tag: 0.9.4
     argo-rollouts-agent:
       enabled: false
     cilium-policy-agent:
@@ -46,6 +50,8 @@ spec:
     istio-agent:
       enabled: false
     promql-agent:
+      enabled: false
+    querydoc:
       enabled: false
     providers:
       default: openAI
