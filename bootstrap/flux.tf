@@ -50,7 +50,7 @@ resource "kubectl_manifest" "rsip" {
       name: releases-image
       namespace: flux-system
       annotations:
-        fluxcd.controlplane.io/reconcileEvery: 5m
+        fluxcd.controlplane.io/reconcileEvery: 2m
     spec:
       type: OCIArtifactTag
       url: ${local.oci_registry}/releases
