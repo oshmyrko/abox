@@ -5,4 +5,7 @@ resources:
   - agentgateway.yaml
   - kagent.yaml
 
+  # Extra tools and agents
+  - mcp-server.yaml
+  - kagent-models.yaml
   - kagent-k8s-read.yaml

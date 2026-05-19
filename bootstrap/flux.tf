@@ -1,9 +1,9 @@
-data "external" "github_user" {
-  program = ["bash", "-c", "git remote get-url origin | awk -F'[:/]' '{print $2}' | jq -R '{username: .}'"]
+data "external" "github_repo" {
+  program = ["bash", "-c", "git remote get-url origin | awk -F'[:.]' '{print $2}' | jq -R '{repo: .}'"]
 }
 
 locals {
-  oci_registry = coalesce(var.oci_registry, "oci://ghcr.io/${data.external.github_user.result.username}/abox")
+  oci_registry = coalesce(var.oci_registry, "oci://ghcr.io/${data.external.github_repo.result.repo}")
 }
 
 # ==========================================
