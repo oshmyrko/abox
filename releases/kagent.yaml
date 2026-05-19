@@ -71,9 +71,15 @@ spec:
     querydoc:
       enabled: false
     providers:
-      default: openAI
+      default: gemini
       #openAI:
       #  apiKey: OPENAI_API_KEY_STUB
+      gemini:
+        provider: Gemini
+        #model: "gemini-3.0-flash-lite"
+        #apiKeySecretRef: kagent-gemini
+        #apiKeySecretKey: GOOGLE_API_KEY
+        apiKey: "GOOGLE_API_KEY"
 
 ---
 apiVersion: gateway.networking.k8s.io/v1
