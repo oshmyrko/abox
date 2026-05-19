@@ -74,10 +74,20 @@ spec:
       #  apiKey: OPENAI_API_KEY_STUB
       gemini:
         provider: Gemini
-        model: gemini-2.5-flash-lite # gemini-2.5-flash-lite
-        #apiKeySecretRef: kagent-gemini
-        #apiKeySecretKey: GEMINI_API_KEY_STUB
-        apiKey: DEFAULT_GEMINI_API_KEY_STUB
+        model: gemini-2.5-flash-lite
+        apiKeySecretRef: kagent-gemini-api-key
+        apiKeySecretKey: GEMINI_API_KEY
+        #apiKey: DEFAULT_GEMINI_API_KEY_STUB
+
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: kagent-gemini-api-key
+  namespace: kagent
+type: Opaque
+stringData:
+  GEMINI_API_KEY: DEFAULT_GEMINI_API_KEY_STUB
 
 ---
 apiVersion: gateway.networking.k8s.io/v1

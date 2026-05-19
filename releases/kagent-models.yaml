@@ -20,5 +20,5 @@ spec:
   provider: Gemini
   gemini: {}
   model: gemini-2.5-flash
-  apiKeySecret: gemini-gemini-2-5-flash
-  apiKeySecretKey: GEMINI_API_KEY_STUB
+  apiKeySecret: kagent-gemini-api-key
+  apiKeySecretKey: GEMINI_API_KEY
