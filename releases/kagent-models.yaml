@@ -1,16 +1,4 @@
 ---
-# apiVersion: kagent.dev/v1alpha2
-# kind: ModelConfig
-# metadata:
-#   name: default-model-config
-#   namespace: kagent
-# spec:
-#   provider: Gemini
-#   model: gemini-2.5-flash-lite
-#   apiKeySecret: kagent-gemini
-#   apiKeySecretKey: GEMINI_API_KEY_STUB
-
----
 apiVersion: kagent.dev/v1alpha2
 kind: ModelConfig
 metadata:
@@ -20,5 +8,5 @@ spec:
   provider: Gemini
   gemini: {}
   model: gemini-2.5-flash
-  apiKeySecret: gemini-gemini-2-5-flash
-  apiKeySecretKey: GEMINI_API_KEY_STUB
+  apiKeySecret: kagent-gemini-api-key
+  apiKeySecretKey: GEMINI_API_KEY
