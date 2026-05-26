@@ -12,5 +12,6 @@ resources:
   - webpage-fetch-agent.yaml
   # Lab 3
   - agentregistry.yaml
+  - agentregistry-discovery-config.yaml
   - mcp-governance.yaml
   - qdrant.yaml
