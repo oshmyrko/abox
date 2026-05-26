@@ -111,8 +111,6 @@ spec:
   parentRefs:
   - name: agentgateway-external
     namespace: agentgateway-system
-  hostnames:
-  - kagent.172.20.0.5.nip.io
   rules:
   - matches:
     - path:
