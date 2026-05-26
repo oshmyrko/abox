@@ -30,7 +30,7 @@ metadata:
   name: mcp-governance
   namespace: mcp-governance
 spec:
-  interval: 1h
+  interval: 5m
   releaseName: mcp-governance
   chartRef:
     kind: OCIRepository

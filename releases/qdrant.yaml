@@ -14,7 +14,7 @@ metadata:
   name: qdrant
   namespace: kagent
 spec:
-  interval: 1h
+  interval: 5m
   chart:
     spec:
       chart: qdrant
