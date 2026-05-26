@@ -35,3 +35,30 @@ spec:
     crds: CreateReplace
   values:
     disableAuth: true
+---
+# ------------------------------------------------
+# Access from load balancer IP at /agentregistry
+# ------------------------------------------------
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: agentregistry
+  namespace: agentregistry
+spec:
+  parentRefs:
+  - name: agentgateway-external
+    namespace: agentgateway-system
+  rules:
+  - matches:
+    - path:
+        type: PathPrefix
+        value: /agentregistry
+    filters:
+    - type: URLRewrite
+      urlRewrite:
+        path:
+          type: ReplacePrefixMatch
+          replacePrefixMatch: /
+    backendRefs:
+    - name: agentregistry-api
+      port: 8080
