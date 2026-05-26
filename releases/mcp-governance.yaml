@@ -1,0 +1,78 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: mcp-governance
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: google-api-key
+  namespace: mcp-governance
+type: Opaque
+stringData:
+  GOOGLE_API_KEY: GEMINI_API_KEY_STUB_MCP_GOVERNANCE
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: OCIRepository
+metadata:
+  name: mcp-governance
+  namespace: flux-system
+spec:
+  interval: 1h
+  url: oci://ghcr.io/techwithhuz/charts/mcp-governance
+  ref:
+    tag: 0.22.2
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: mcp-governance
+  namespace: mcp-governance
+spec:
+  interval: 1h
+  releaseName: mcp-governance
+  chartRef:
+    kind: OCIRepository
+    name: mcp-governance
+    namespace: flux-system
+  install:
+    crds: Create
+  upgrade:
+    crds: CreateReplace
+  values:
+    createNamespace: false
+    controller:
+      image:
+        repository: ghcr.io/techwithhuz/mcp-governance-controller
+        pullPolicy: IfNotPresent
+        tag: 0.22.2
+    dashboard:
+      image:
+        repository: ghcr.io/techwithhuz/mcp-governance-dashboard
+        pullPolicy: IfNotPresent
+        tag: 0.22.2
+      service:
+        type: ClusterIP
+        nodePort: null
+    samples:
+      install: false
+    governancePolicy:
+      spec:
+        requireAgentGateway: true
+        requireJWTAuth: true
+        requireRBAC: true
+        requireCORS: true
+        requireTLS: true
+        requirePromptGuard: true
+        requireRateLimit: true
+        maxToolsWarning: 5
+        maxToolsCritical: 10
+        targetNamespaces:
+          - kagent
+        aiAgent:
+          enabled: true
+          provider: gemini
+          model: gemini-2.5-flash
+          scanInterval: 10m
+          scanEnabled: true

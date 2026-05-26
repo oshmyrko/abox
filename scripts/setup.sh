@@ -41,25 +41,4 @@ export KUBECONFIG=~/.kube/config
 
 cd ..
 
-# Install cloud-provider-kind (LoadBalancer support)
-log "Installing cloud-provider-kind..."
-case "$(uname -s)" in
-  Linux)  OS=linux;  SUDO=""     ;;
-  Darwin) OS=darwin; SUDO="sudo" ;; # macOS requires elevated permissions to run cloud-provider-kind
-  *) log "Unsupported OS: $(uname -s); skipping cloud-provider-kind" ;;
-esac
-case "$(uname -m)" in
-  amd64|x86_64)  ARCH=amd64 ;;
-  arm64|aarch64) ARCH=arm64 ;;
-  *) log "Unsupported arch: $(uname -m); skipping cloud-provider-kind" ;;
-esac
-if [[ -n "${OS:-}" && -n "${ARCH:-}" ]]; then
-  CPK_URL="https://github.com/kubernetes-sigs/cloud-provider-kind/releases/download/v0.10.0/cloud-provider-kind_0.10.0_${OS}_${ARCH}.tar.gz"
-  curl -fsSL "$CPK_URL" -o /tmp/cloud-provider-kind.tar.gz
-  tar -xzf /tmp/cloud-provider-kind.tar.gz -C /tmp cloud-provider-kind
-  rm -f /tmp/cloud-provider-kind.tar.gz
-  nohup $SUDO /tmp/cloud-provider-kind > /tmp/cloud-provider-kind.log 2>&1 &
-  log "cloud-provider-kind started (pid $!)"
-fi
-
 log "=== setup complete ==="

@@ -56,7 +56,10 @@ spec:
     ui:
       image:
         tag: 0.9.4
+    # Agents
     argo-rollouts-agent:
+      enabled: false
+    helm-agent:
       enabled: false
     cilium-policy-agent:
       enabled: false
@@ -66,8 +69,16 @@ spec:
       enabled: false
     istio-agent:
       enabled: false
+    #observability-agent:
+    #  enabled: false
+    #promql-agent:
+    #  enabled: false
+    # MCP Tools
+    #grafana-mcp:
+    #  enabled: false
     querydoc:
       enabled: false
+    # Provider configuration
     providers:
       default: gemini
       gemini:
