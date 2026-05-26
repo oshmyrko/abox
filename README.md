@@ -17,7 +17,7 @@
 ## Quickstart
 
 ```bash
-echo "gemini_api_key = \"YOUR_GEMINI_API_KEY\"" > bootstrap/kubectl.tfvars
+echo "gemini_api_key = \"YOUR_GEMINI_API_KEY\"" > bootstrap/terraform.tfvars
 ```
 
 ```bash
