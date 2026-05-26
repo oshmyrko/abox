@@ -37,7 +37,7 @@ spec:
     disableAuth: true
 ---
 # ------------------------------------------------
-# Access from load balancer IP at /agentregistry
+# Access via http://agentregistry.172.20.0.5.nip.io
 # ------------------------------------------------
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
@@ -48,17 +48,9 @@ spec:
   parentRefs:
   - name: agentgateway-external
     namespace: agentgateway-system
+  hostnames:
+  - agentregistry.172.20.0.5.nip.io
   rules:
-  - matches:
-    - path:
-        type: PathPrefix
-        value: /agentregistry
-    filters:
-    - type: URLRewrite
-      urlRewrite:
-        path:
-          type: ReplacePrefixMatch
-          replacePrefixMatch: /
-    backendRefs:
+  - backendRefs:
     - name: agentregistry-api
       port: 8080

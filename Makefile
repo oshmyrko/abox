@@ -1,5 +1,5 @@
-UNAME_S := $(shell uname -s)
-ifeq ($(UNAME_S),Darwin)
+OS := $(shell uname -s)
+ifeq ($(OS),Darwin)
   SUDO      := sudo
   SUDO_AUTH := sudo -v &&
 else
