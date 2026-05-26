@@ -36,9 +36,25 @@ spec:
   values:
     disableAuth: true
 ---
-# ------------------------------------------------
-# Access from load balancer IP at /agentregistry
-# ------------------------------------------------
+# ----------------------------------------------------------
+# Enable discovery of agents in the "kagent" namespace
+# ----------------------------------------------------------
+apiVersion: agentregistry.dev/v1alpha1
+kind: DiscoveryConfig
+metadata:
+  name: abox
+  namespace: agentregistry
+spec:
+  environments:
+  - name: abox
+    cluster:
+      name: local
+    namespaces: [kagent]
+    discoveryEnabled: true
+---
+# ----------------------------------------------------------
+# Access via http://agentregistry.172.20.0.5.nip.io
+# ----------------------------------------------------------
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
 metadata:
@@ -48,17 +64,9 @@ spec:
   parentRefs:
   - name: agentgateway-external
     namespace: agentgateway-system
+  hostnames:
+  - agentregistry.172.20.0.5.nip.io
   rules:
-  - matches:
-    - path:
-        type: PathPrefix
-        value: /agentregistry
-    filters:
-    - type: URLRewrite
-      urlRewrite:
-        path:
-          type: ReplacePrefixMatch
-          replacePrefixMatch: /
-    backendRefs:
+  - backendRefs:
     - name: agentregistry-api
       port: 8080
